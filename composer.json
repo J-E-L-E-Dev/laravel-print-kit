@@ -1,0 +1,90 @@
+{
+    "name": "ahinest/laravel-print-kit",
+    "description": "Infraestructura configurable de formatos de impresión y etiquetas para Laravel.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "ext-xmlwriter": "*",
+        "bacon/bacon-qr-code": "^2.0.8 || ^3.0.3",
+        "brick/math": "^0.12 || ^0.13 || ^0.14",
+        "illuminate/database": "^10.48 || ^11.0 || ^12.0",
+        "illuminate/http": "^10.48 || ^11.0 || ^12.0",
+        "illuminate/pagination": "^10.48 || ^11.0 || ^12.0",
+        "illuminate/routing": "^10.48 || ^11.0 || ^12.0",
+        "illuminate/support": "^10.48 || ^11.0 || ^12.0",
+        "illuminate/validation": "^10.48 || ^11.0 || ^12.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
+        "phpunit/phpunit": "^10.5 || ^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ahinest\\LaravelPrintKit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ahinest\\LaravelPrintKit\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ahinest\\LaravelPrintKit\\PrintKitServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "@php vendor/phpunit/phpunit/phpunit",
+        "format": "@php vendor/laravel/pint/builds/pint",
+        "format:check": "@php vendor/laravel/pint/builds/pint --test"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "keywords": [
+        "laravel",
+        "printing",
+        "labels",
+        "qr-code",
+        "html"
+    ],
+    "archive": {
+        "exclude": [
+            "/vendor",
+            "/.git",
+            "/.github",
+            "/.compat",
+            "/.phpunit.cache",
+            "/.phpunit.result.cache",
+            "/.php-cs-fixer.cache",
+            "/node_modules",
+            "/tests",
+            "/docs",
+            "/coverage",
+            "/build",
+            "/dist",
+            "/tmp",
+            "/temp",
+            "/phpunit.xml*",
+            "/pint.json",
+            "/testbench.yaml",
+            "/composer.lock",
+            "/.env*",
+            "/.idea",
+            "/.vscode",
+            "/*.log",
+            "/**/*.log",
+            "/*.zip",
+            "/*.tar",
+            "/*.sqlite",
+            "/*.sqlite3",
+            "/*.sql",
+            "/AGENTS.md",
+            "/.codex"
+        ]
+    }
+}

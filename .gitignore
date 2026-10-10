@@ -1,0 +1,4 @@
+/vendor/
+/.phpunit.cache/
+/testbench.yaml
+/.compat/

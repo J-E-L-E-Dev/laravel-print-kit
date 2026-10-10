@@ -1,0 +1,54 @@
+name: Tests
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { laravel: '10', php: '8.1', testbench: '^8.0', phpunit: '^10.5', qr: '^3.0.3' }
+          - { laravel: '10', php: '8.2', testbench: '^8.0', phpunit: '^10.5', qr: '^3.0.3' }
+          - { laravel: '10', php: '8.3', testbench: '^8.0', phpunit: '^10.5', qr: '^3.0.3' }
+          - { laravel: '11', php: '8.2', testbench: '^9.0', phpunit: '^11.5', qr: '^3.0.3' }
+          - { laravel: '11', php: '8.4', testbench: '^9.0', phpunit: '^11.5', qr: '^3.0.3' }
+          - { laravel: '12', php: '8.2', testbench: '^10.0', phpunit: '^11.5', qr: '^3.0.3' }
+          - { laravel: '12', php: '8.4', testbench: '^10.0', phpunit: '^11.5', qr: '^3.0.3' }
+          - { laravel: '12', php: '8.2', testbench: '^10.0', phpunit: '^11.5', qr: '^2.0.8' }
+    name: Laravel ${{ matrix.laravel }} / PHP ${{ matrix.php }} / QR ${{ matrix.qr }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo_sqlite, iconv, xmlwriter
+          coverage: none
+          tools: composer:v2
+      # La excepción permite probar ramas antiguas con avisos conocidos, sin alterar el config del paquete.
+      - name: Resolve dependencies
+        env:
+          COMPOSER_NO_SECURITY_BLOCKING: ${{ matrix.laravel != '12' && '1' || '0' }}
+        run: composer update --with "orchestra/testbench:${{ matrix.testbench }}" --with "phpunit/phpunit:${{ matrix.phpunit }}" --with "bacon/bacon-qr-code:${{ matrix.qr }}" --no-interaction --prefer-dist
+      - run: composer validate --strict
+      - run: composer check-platform-reqs
+      - run: composer test
+      - name: Audit dependencies
+        continue-on-error: ${{ matrix.laravel != '12' }}
+        run: composer audit
+
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer:v2
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer format:check
